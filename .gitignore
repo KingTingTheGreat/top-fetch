@@ -1,0 +1,6 @@
+.env
+tmplts/*_templ.go
+*.exe
+top-fetch
+top-fetch-server
+tmp/
