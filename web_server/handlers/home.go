@@ -13,5 +13,5 @@ func HomePageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tmplts.LayoutComponent(tmplts.Home(), "Top Fetch").Render(r.Context(), w)
+	tmplts.LayoutComponent(tmplts.Home(), "TopFetch").Render(r.Context(), w)
 }

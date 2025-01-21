@@ -45,7 +45,7 @@ func SpotifyCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil {
 		log.Println("found existing user")
 		w.WriteHeader(http.StatusOK)
-		tmplts.LayoutComponent(tmplts.Callback(user.Id), "Top Fetch").Render(r.Context(), w)
+		tmplts.LayoutComponent(tmplts.Callback(user.Id), "TopFetch").Render(r.Context(), w)
 		return
 	}
 
@@ -64,5 +64,5 @@ func SpotifyCallbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Println("created new user")
-	tmplts.LayoutComponent(tmplts.Callback(id), "Top Fetch").Render(r.Context(), w)
+	tmplts.LayoutComponent(tmplts.Callback(id), "TopFetch").Render(r.Context(), w)
 }
