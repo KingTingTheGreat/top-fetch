@@ -46,7 +46,7 @@ func ConnectDB() *mongo.Client {
 	bg := context.Background()
 	wT, cancel := context.WithTimeout(bg, 10000*time.Millisecond)
 	defer func() { cancel() }()
-	client, err := mongo.Connect(wT, options.Client().ApplyURI(os.Getenv("MONGO_URI"))
+	client, err := mongo.Connect(wT, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
 	if err != nil {
 		log.Fatal(err)
 	}
