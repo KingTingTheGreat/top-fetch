@@ -3,9 +3,9 @@ package handlers
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/kingtingthegreat/top-fetch/db"
+	"github.com/kingtingthegreat/top-fetch/env"
 	"github.com/kingtingthegreat/top-fetch/providers/spotify"
 )
 
@@ -26,7 +26,7 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	track, newAccessToken, err := spotify.GetUserTopTrack(os.Getenv("SPOTIFY_CLIENT_ID"), os.Getenv("SPOTIFY_CLIENT_SECRET"), user.AccessToken, user.RefreshToken)
+	track, newAccessToken, err := spotify.GetUserTopTrack(env.EnvVal("SPOTIFY_CLIENT_ID"), env.EnvVal("SPOTIFY_CLIENT_SECRET"), user.AccessToken, user.RefreshToken)
 	if err != nil {
 		log.Println("could not get track")
 		w.WriteHeader(http.StatusInternalServerError)

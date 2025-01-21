@@ -3,24 +3,33 @@ package env
 import (
 	_ "embed"
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 )
 
 //go:embed .env
-var EnvString string
-var Env map[string]string
+var envString string
+var env map[string]string
 
 func LoadEnv() {
 	var err error
-	Env, err = godotenv.Unmarshal(EnvString)
+	env, err = godotenv.Unmarshal(envString)
 	if err != nil {
 		log.Fatal("failed to parse .env in env/.env")
 	}
 }
 
 func SaveSpotifyEnv(accessToken string, refreshToken string) error {
-	Env["SPOTIFY_ACCESS_TOKEN"] = accessToken
-	Env["SPOTIFY_REFRESH_TOKEN"] = refreshToken
-	return godotenv.Write(Env, ".env")
+	env["SPOTIFY_ACCESS_TOKEN"] = accessToken
+	env["SPOTIFY_REFRESH_TOKEN"] = refreshToken
+	return godotenv.Write(env, ".env")
+}
+
+func EnvVal(key string) string {
+	val := env[key]
+	if val != "" {
+		return val
+	}
+	return os.Getenv(key)
 }

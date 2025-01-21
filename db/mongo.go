@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"math/rand"
-	"os"
 	"time"
 
 	"github.com/kingtingthegreat/top-fetch/env"
@@ -46,7 +45,7 @@ func ConnectDB() *mongo.Client {
 	bg := context.Background()
 	wT, cancel := context.WithTimeout(bg, 10000*time.Millisecond)
 	defer func() { cancel() }()
-	client, err := mongo.Connect(wT, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
+	client, err := mongo.Connect(wT, options.Client().ApplyURI(env.EnvVal("MONGO_URI")))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,15 +60,15 @@ func ConnectDB() *mongo.Client {
 }
 
 var db *mongo.Client = ConnectDB()
-var userColletion *mongo.Collection = getCollection(env.Env["COLLECTION_NAME"])
+var userColletion *mongo.Collection = getCollection(env.EnvVal("COLLECTION_NAME"))
 
 func getCollection(collectionName string) *mongo.Collection {
-	environment := env.Env["ENVIRONMENT"]
+	environment := env.EnvVal("ENVIRONMENT")
 	if environment == "" {
 		environment = "dev"
 	}
 
-	return db.Database(env.Env["DB_NAME"] + environment).Collection(collectionName)
+	return db.Database(env.EnvVal("DB_NAME") + environment).Collection(collectionName)
 }
 
 func GetUserById(id string) (*DBUser, error) {

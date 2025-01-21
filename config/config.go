@@ -185,12 +185,12 @@ func ParseArgs() {
 	cfg.ConverterConfig.PaddingLeft += cfg.MarginLeft
 
 	if cfg.TopFetchId == "" {
-		cfg.TopFetchId = env.Env["TOP_FETCH_ID"]
+		cfg.TopFetchId = env.EnvVal("TOP_FETCH_ID")
 	}
-	cfg.SpotifyClientId = env.Env["SPOTIFY_CLIENT_ID"]
-	cfg.SpotifyClientSecret = env.Env["SPOTIFY_CLIENT_SECRET"]
-	cfg.SpotifyAccessToken = env.Env["SPOTIFY_ACCESS_TOKEN"]
-	cfg.SpotifyRefreshToken = env.Env["SPOTIFY_REFRESH_TOKEN"]
+	cfg.SpotifyClientId = env.EnvVal("SPOTIFY_CLIENT_ID")
+	cfg.SpotifyClientSecret = env.EnvVal("SPOTIFY_CLIENT_SECRET")
+	cfg.SpotifyAccessToken = env.EnvVal("SPOTIFY_ACCESS_TOKEN")
+	cfg.SpotifyRefreshToken = env.EnvVal("SPOTIFY_REFRESH_TOKEN")
 }
 
 func Config() *config {

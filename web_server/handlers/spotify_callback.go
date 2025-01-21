@@ -19,9 +19,9 @@ func SpotifyCallbackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	clientId := env.Env["SPOTIFY_CLIENT_ID"]
-	clientSecret := env.Env["SPOTIFY_CLIENT_SECRET"]
-	redirectUri := env.Env["SPOTIFY_REDIRECT_URI"]
+	clientId := env.EnvVal("SPOTIFY_CLIENT_ID")
+	clientSecret := env.EnvVal("SPOTIFY_CLIENT_SECRET")
+	redirectUri := env.EnvVal("SPOTIFY_REDIRECT_URI")
 
 	accessToken, refreshToken, err := spotify.ExchangeCode(clientId, clientSecret, redirectUri, code)
 	if err != nil {
