@@ -17,7 +17,6 @@ func LoadEnv() {
 	if err != nil {
 		log.Fatal("failed to parse .env in env/.env")
 	}
-	godotenv.Load("env/.env")
 }
 
 func SaveSpotifyEnv(accessToken string, refreshToken string) error {
