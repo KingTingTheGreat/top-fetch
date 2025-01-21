@@ -1,7 +1,7 @@
 *.env*
 web_server/tmplts/*_templ.go
 *.exe
-./top-fetch
-./top-fetch-server
+top-fetch
+top-fetch-server
 tmp/
 public/styles.css
