@@ -1,4 +1,4 @@
-.env
+*.env*
 web_server/tmplts/*_templ.go
 *.exe
 ./top-fetch
