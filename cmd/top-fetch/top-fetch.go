@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/kingtingthegreat/top-fetch/config"
-	"github.com/kingtingthegreat/top-fetch/convert"
 	"github.com/kingtingthegreat/top-fetch/env"
 	"github.com/kingtingthegreat/top-fetch/output"
 )
@@ -20,7 +19,7 @@ func fetchAndDisplay(web bool) {
 	// 	imageUrl, trackText = fetch.LocalFetch()
 	// }
 	// log.Println("converting")
-	ansiImage, err := convert.UrlToAnsi(imageUrl)
+	ansiImage, err := output.UrlToAnsi(imageUrl)
 	if err != nil {
 		log.Fatal(err)
 	}
