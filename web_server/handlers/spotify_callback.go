@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/kingtingthegreat/top-fetch/db"
 	"github.com/kingtingthegreat/top-fetch/env"
 	"github.com/kingtingthegreat/top-fetch/providers"
 	"github.com/kingtingthegreat/top-fetch/providers/spotify"
+	"github.com/kingtingthegreat/top-fetch/web_server/db"
 	"github.com/kingtingthegreat/top-fetch/web_server/tmplts"
 )
 
