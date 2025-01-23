@@ -1,6 +1,7 @@
 package output
 
 import (
+	"image"
 	"log"
 	"os"
 	"strings"
@@ -13,17 +14,27 @@ func centerTrackText(trackText string, dim int, left, right int) string {
 		return trackText
 	}
 
-	width := dim + right + left
-	leftPad := (width - len(trackText)) / 2
-	rightPad := width - len(trackText) - leftPad
+	width := left + dim + right
+	rightPad := (width - len(trackText)) / 2
+	leftPad := width - len(trackText) - rightPad
 	return strings.Repeat(" ", leftPad) + trackText + strings.Repeat(" ", rightPad)
 }
 
-func Output(ansiImage, trackText string) {
+func Output(img *image.Image, trackText string) {
 	cfg := config.Config()
+
+	// display image itself
+	if cfg.Kitty {
+		trackText = centerTrackText(trackText, int(cfg.ConverterConfig.Dim/cfg.Pix),
+			cfg.ConverterConfig.PaddingLeft, cfg.ConverterConfig.PaddingRight)
+		KittyOutput(trackText, img)
+		return
+	}
+
+	// display ansi image
 	trackText = centerTrackText(trackText, int(cfg.ConverterConfig.Dim),
 		cfg.ConverterConfig.PaddingLeft, cfg.ConverterConfig.PaddingRight)
-
+	ansiImage := ImageToAnsi(img)
 	outputString := strings.Repeat("\n", cfg.MarginTop) + ansiImage + "\n" + trackText + "\n" + strings.Repeat("\n", cfg.MarginBottom)
 
 	// write to desired output

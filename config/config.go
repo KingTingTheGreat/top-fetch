@@ -13,6 +13,8 @@ import (
 
 type config struct {
 	Web                 bool
+	Kitty               bool
+	Pix                 float64
 	TopFetchId          string
 	SpotifyClientId     string
 	SpotifyClientSecret string
@@ -32,6 +34,8 @@ type config struct {
 
 const (
 	WEB            = "web"
+	KITTY          = "kitty"
+	PIX            = "pix"
 	DIM            = "dim"
 	CHAR           = "char"
 	RATIO          = "ratio"
@@ -55,6 +59,8 @@ const WRAP = "wrap"
 
 var cfg config = config{
 	Web:          false,
+	Kitty:        false,
+	Pix:          10,
 	Path:         "source",
 	File:         "",
 	Wrap:         false,
@@ -89,6 +95,14 @@ func ParseArgs() {
 			if val != "" {
 				cfg.TopFetchId = val
 			}
+		case KITTY:
+			cfg.Kitty = true
+		case PIX:
+			newPix, err := strconv.ParseFloat(val, 64)
+			if err != nil {
+				log.Fatal("invalid px per char")
+			}
+			cfg.Pix = newPix
 		case DIM:
 			newDim, err := strconv.ParseFloat(val, 64)
 			if err != nil {

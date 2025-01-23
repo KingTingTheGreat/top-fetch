@@ -18,12 +18,12 @@ func fetchAndDisplay(web bool) {
 		imageUrl, trackText = fetch.LocalFetch()
 	}
 
-	ansiImage, err := output.UrlToAnsi(imageUrl)
+	img, err := output.UrlToImage(imageUrl)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	output.Output(ansiImage, trackText)
+	output.Output(img, trackText)
 }
 
 func main() {
