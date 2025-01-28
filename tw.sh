@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npx tailwindcss -i input.css -o public/styles.css --watch
+npx @tailwindcss/cli -i input.css -o public/styles.css --watch
