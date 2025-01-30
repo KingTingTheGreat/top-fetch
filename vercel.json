@@ -1,5 +1,5 @@
 {
-  "buildCommand": "touch env/.env && curl -L https://github.com/a-h/templ/releases/download/v0.3.819/templ_Linux_x86_64.tar.gz | tar -xz && ./templ generate && npm install -g tailwindcss @tailwindcss/cli && npx @tailwindcss/cli -i ./input.css -o ./public/styles.css",
+  "buildCommand": "touch env/.env && curl -L https://github.com/a-h/templ/releases/download/v0.3.819/templ_Linux_x86_64.tar.gz | tar -xz && ./templ generate && npm install tailwindcss @tailwindcss/cli && npx @tailwindcss/cli -i ./input.css -o ./public/styles.css",
   "rewrites": [
     { "source": "/:path((?!public/).*)", "destination": "api/index.go" },
     { "source": "/public/:path*", "destination": "/:path*" }
