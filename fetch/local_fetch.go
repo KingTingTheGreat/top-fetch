@@ -15,7 +15,7 @@ func LocalFetch() (string, string) {
 		log.Fatal("Spotify client id or client secret is not set")
 	}
 	if cfg.SpotifyAccessToken == "" || cfg.SpotifyRefreshToken == "" {
-		fmt.Println("please visit", spotify.AuthUrl(cfg.SpotifyClientId, "http://localhost:8080"))
+		fmt.Println("please visit", spotify.AuthUrl(cfg.SpotifyClientId, "http://localhost:8080/callback/spotify"))
 		var err error
 		cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken, err = spotify.InitSpotify(cfg.SpotifyClientId, cfg.SpotifyClientSecret)
 		if err != nil {

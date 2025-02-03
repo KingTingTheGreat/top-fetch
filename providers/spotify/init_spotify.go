@@ -25,7 +25,7 @@ func InitSpotify(clientId, clientSecret string) (string, string, error) {
 			accessToken, refreshToken, err = ExchangeCode(
 				clientId,
 				clientSecret,
-				"http://localhost:8080",
+				"http://localhost:8080/callback/spotify",
 				code,
 			)
 			if err != nil {
