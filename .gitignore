@@ -5,3 +5,7 @@ web_server/tmplts/*_templ.go
 /top-fetch-server
 tmp/
 public/styles.css
+
+node_modules
+package.json
+package-lock.json
