@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -197,7 +198,16 @@ func ParseArgs() {
 			}
 			cfg.MarginLeft = newMarginLeft
 		case ENV:
-			cfg.Env = val
+			if strings.HasPrefix(val, "~") {
+				home, err := os.UserHomeDir()
+				if err != nil {
+					log.Fatal("could not evaluate home directory")
+				}
+				val, _ = strings.CutPrefix(val, "~")
+				cfg.Env = filepath.Join(home, val)
+			} else {
+				cfg.Env = val
+			}
 		}
 	}
 	cfg.ConverterConfig.PaddingRight += cfg.MarginRight
