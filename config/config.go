@@ -37,6 +37,7 @@ type config struct {
 
 const (
 	WEB            = "web"
+	ID             = "id"
 	KITTY          = "kitty"
 	PIX            = "pix"
 	DIM            = "dim"
@@ -95,6 +96,11 @@ func ParseArgs() {
 		}
 		switch arg {
 		case WEB:
+			cfg.Web = true
+			if val != "" {
+				cfg.TopFetchId = val
+			}
+		case ID:
 			cfg.Web = true
 			if val != "" {
 				cfg.TopFetchId = val
