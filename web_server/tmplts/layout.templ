@@ -14,6 +14,7 @@ templ head(title string) {
 }
 
 var defaultStyles = "bg-zinc-900 text-white"
+var rootStyles = "p-8"
 
 templ LayoutComponent(content templ.Component, title string) {
 	<!DOCTYPE html>
@@ -21,7 +22,9 @@ templ LayoutComponent(content templ.Component, title string) {
 		@head(title)
 		<body class={ defaultStyles }>
 			@Header(title == "Docs")
-			@content
+			<div class={ rootStyles }>
+				@content
+			</div>
 		</body>
 	</html>
 }
@@ -32,7 +35,9 @@ templ LayoutString(message string, title string) {
 		@head(title)
 		<body class={ defaultStyles }>
 			@Header(title == "Docs")
-			{ message }
+			<div class={ rootStyles }>
+				{ message }
+			</div>
 		</body>
 	</html>
 }
