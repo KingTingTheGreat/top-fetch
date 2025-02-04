@@ -239,10 +239,18 @@ func ParseArgs() {
 	if cfg.TopFetchId == "" {
 		cfg.TopFetchId = env.EnvVal("TOP_FETCH_ID")
 	}
-	cfg.SpotifyClientId = env.EnvVal("SPOTIFY_CLIENT_ID")
-	cfg.SpotifyClientSecret = env.EnvVal("SPOTIFY_CLIENT_SECRET")
-	cfg.SpotifyAccessToken = env.EnvVal("SPOTIFY_ACCESS_TOKEN")
-	cfg.SpotifyRefreshToken = env.EnvVal("SPOTIFY_REFRESH_TOKEN")
+	if cfg.SpotifyClientId == "" {
+		cfg.SpotifyClientId = env.EnvVal("SPOTIFY_CLIENT_ID")
+	}
+	if cfg.SpotifyClientSecret == "" {
+		cfg.SpotifyClientSecret = env.EnvVal("SPOTIFY_CLIENT_SECRET")
+	}
+	if cfg.SpotifyAccessToken == "" {
+		cfg.SpotifyAccessToken = env.EnvVal("SPOTIFY_ACCESS_TOKEN")
+	}
+	if cfg.SpotifyRefreshToken == "" {
+		cfg.SpotifyRefreshToken = env.EnvVal("SPOTIFY_REFRESH_TOKEN")
+	}
 }
 
 func Config() *config {
