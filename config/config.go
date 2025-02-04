@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/joho/godotenv"
 	converter_config "github.com/kingtingthegreat/ansi-converter/config"
 	"github.com/kingtingthegreat/ansi-converter/defaults"
 	"github.com/kingtingthegreat/top-fetch/env"
@@ -30,6 +31,7 @@ type config struct {
 	MarginBottom        int
 	MarginLeft          int
 	ConverterConfig     converter_config.Config
+	Env                 string
 }
 
 const (
@@ -53,6 +55,7 @@ const (
 	MARGIN_RIGHT   = "mR"
 	MARGIN_BOTTOM  = "mB"
 	MARGIN_LEFT    = "mL"
+	ENV            = "env"
 )
 
 const WRAP = "wrap"
@@ -193,11 +196,30 @@ func ParseArgs() {
 				log.Fatal("invalid margin left")
 			}
 			cfg.MarginLeft = newMarginLeft
+		case ENV:
+			cfg.Env = val
 		}
 	}
 	cfg.ConverterConfig.PaddingRight += cfg.MarginRight
 	cfg.ConverterConfig.PaddingLeft += cfg.MarginLeft
 
+	// prioritize env file
+	if cfg.Env != "" {
+		envMap, err := godotenv.Read(cfg.Env)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if cfg.TopFetchId == "" {
+			cfg.TopFetchId = envMap["TOP_FETCH_ID"]
+		}
+		cfg.SpotifyClientId = envMap["SPOTIFY_CLIENT_ID"]
+		cfg.SpotifyClientSecret = envMap["SPOTIFY_CLIENT_SECRET"]
+		cfg.SpotifyAccessToken = envMap["SPOTIFY_ACCESS_TOKEN"]
+		cfg.SpotifyRefreshToken = envMap["SPOTIFY_REFRESH_TOKEN"]
+	}
+
+	// next try compiled env file, then environment variables
 	if cfg.TopFetchId == "" {
 		cfg.TopFetchId = env.EnvVal("TOP_FETCH_ID")
 	}

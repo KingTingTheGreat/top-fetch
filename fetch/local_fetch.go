@@ -21,7 +21,12 @@ func LocalFetch() (string, string) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		go env.SaveSpotifyEnv(cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken)
+
+		if cfg.Env == "" {
+			go env.SaveSpotifyEnv(cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken)
+		} else {
+			go env.SaveSpotifyEnvFile(cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken, cfg.Env)
+		}
 	}
 	// log.Println("getting top track")
 	track, newAccessToken, err := spotify.GetUserTopTrack(cfg.SpotifyClientId, cfg.SpotifyClientSecret, cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken)
@@ -29,7 +34,11 @@ func LocalFetch() (string, string) {
 		log.Fatal(err.Error())
 	}
 	if newAccessToken != "" {
-		go env.SaveSpotifyEnv(newAccessToken, cfg.SpotifyRefreshToken)
+		if cfg.Env == "" {
+			go env.SaveSpotifyEnv(cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken)
+		} else {
+			go env.SaveSpotifyEnvFile(cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken, cfg.Env)
+		}
 	}
 
 	return track.Album.Images[0].Url, track.Name + " - " + track.Artists[0].Name
