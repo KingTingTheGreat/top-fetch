@@ -8,9 +8,9 @@ import (
 
 	"github.com/kingtingthegreat/top-fetch/env"
 	"github.com/kingtingthegreat/top-fetch/providers"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type DBUser struct {
@@ -45,7 +45,7 @@ func ConnectDB() *mongo.Client {
 	bg := context.Background()
 	wT, cancel := context.WithTimeout(bg, 10000*time.Millisecond)
 	defer func() { cancel() }()
-	client, err := mongo.Connect(wT, options.Client().ApplyURI(env.EnvVal("MONGO_URI")))
+	client, err := mongo.Connect(options.Client().ApplyURI(env.EnvVal("MONGO_URI")))
 	if err != nil {
 		log.Fatal(err)
 	}
