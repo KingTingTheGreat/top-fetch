@@ -6,6 +6,9 @@ web_server/tmplts/*_templ.go
 tmp/
 public/styles.css
 
+backup.txt
+
 node_modules
 package.json
 package-lock.json
+
