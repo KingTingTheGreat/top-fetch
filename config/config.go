@@ -33,6 +33,7 @@ type config struct {
 	MarginLeft          int
 	ConverterConfig     converter_config.Config
 	Env                 string
+	Backup              string
 }
 
 const (
@@ -58,6 +59,7 @@ const (
 	MARGIN_BOTTOM  = "mB"
 	MARGIN_LEFT    = "mL"
 	ENV            = "env"
+	BACKUP         = "backup"
 )
 
 const WRAP = "wrap"
@@ -83,6 +85,7 @@ var cfg config = config{
 		PaddingBottom: 0,
 		PaddingLeft:   0,
 	},
+	Backup: "",
 }
 
 func ParseArgs() {
@@ -204,15 +207,26 @@ func ParseArgs() {
 			}
 			cfg.MarginLeft = newMarginLeft
 		case ENV:
-			if strings.HasPrefix(val, "~") {
+			val, f := strings.CutPrefix(val, "~")
+			if f {
 				home, err := os.UserHomeDir()
 				if err != nil {
 					log.Fatal("could not evaluate home directory")
 				}
-				val, _ = strings.CutPrefix(val, "~")
 				cfg.Env = filepath.Join(home, val)
 			} else {
 				cfg.Env = val
+			}
+		case BACKUP:
+			val, f := strings.CutPrefix(val, "~")
+			if f {
+				home, err := os.UserHomeDir()
+				if err != nil {
+					log.Fatal("could not evaluate home directory")
+				}
+				cfg.Backup = filepath.Join(home, val)
+			} else {
+				cfg.Backup = val
 			}
 		}
 	}
