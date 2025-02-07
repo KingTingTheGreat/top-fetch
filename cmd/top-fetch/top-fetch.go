@@ -42,7 +42,14 @@ func main() {
 		case <-done:
 			return
 		case <-timeout:
-			log.Fatal("Exceeded the ", cfg.Timeout, " millisecond time limit")
+			if cfg.Backup == "" {
+				log.Fatal("Exceeded the ", cfg.Timeout, " millisecond time limit")
+			}
+			backupString := output.ReadBackup(cfg.Backup)
+			if backupString == "" {
+				log.Fatal("Exceeded the ", cfg.Timeout, " millisecond time limit and backup is empty")
+			}
+			output.OutputBackup(backupString)
 		}
 	}
 }
