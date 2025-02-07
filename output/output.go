@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"sync"
 
 	"github.com/kingtingthegreat/top-fetch/config"
 )
@@ -37,6 +38,11 @@ func Output(img *image.Image, trackText string) {
 	ansiImage := ImageToAnsi(img)
 	outputString := strings.Repeat("\n", cfg.MarginTop) + ansiImage + "\n" + trackText + "\n" + strings.Repeat("\n", cfg.MarginBottom)
 
+	var wg *sync.WaitGroup
+	if cfg.Backup != "" {
+		wg = WriteBackup(cfg.Backup, outputString)
+	}
+
 	// write to desired output
 	if cfg.File != "" {
 		outputFile, err := WriteToFile(outputString)
@@ -46,5 +52,20 @@ func Output(img *image.Image, trackText string) {
 		os.Stdout.WriteString(outputFile)
 	} else {
 		os.Stdout.WriteString(outputString)
+	}
+	wg.Wait()
+}
+
+func OutputBackup(backupString string) {
+	cfg := config.Config()
+
+	if cfg.Kitty || cfg.File == "" {
+		os.Stdout.WriteString(backupString)
+	} else {
+		outputFile, err := WriteToFile(backupString)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+		os.Stdout.WriteString(outputFile)
 	}
 }
