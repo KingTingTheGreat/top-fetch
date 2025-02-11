@@ -38,9 +38,9 @@ func Output(img *image.Image, trackText string) {
 	ansiImage := ImageToAnsi(img)
 	outputString := strings.Repeat("\n", cfg.MarginTop) + ansiImage + "\n" + trackText + "\n" + strings.Repeat("\n", cfg.MarginBottom)
 
-	var wg *sync.WaitGroup
+	var wg sync.WaitGroup
 	if cfg.Backup != "" {
-		wg = WriteBackup(cfg.Backup, outputString)
+		wg = *WriteBackup(cfg.Backup, outputString)
 	}
 
 	// write to desired output
