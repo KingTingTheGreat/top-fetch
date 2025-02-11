@@ -26,9 +26,10 @@ func KittyOutput(trackText string, img *image.Image) {
 	builder.WriteString("\n" + trackText + "\n")
 	builder.WriteString(strings.Repeat("\n", cfg.MarginBottom))
 
-	var wg sync.WaitGroup
+	wg := sync.WaitGroup{}
 	if cfg.Backup != "" {
-		wg = *WriteBackup(cfg.Backup, builder.String())
+		wg.Add(1)
+		go WriteBackup(cfg.Backup, builder.String(), &wg)
 	}
 
 	os.Stdout.WriteString(builder.String())

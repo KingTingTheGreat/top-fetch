@@ -15,14 +15,7 @@ func ReadBackup(file string) string {
 	return string(data)
 }
 
-func WriteBackup(file string, data string) *sync.WaitGroup {
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		os.WriteFile(file, []byte(data), 0666)
-		wg.Done()
-	}()
-
-	return &wg
+func WriteBackup(file string, data string, wg *sync.WaitGroup) {
+	os.WriteFile(file, []byte(data), 0666)
+	wg.Done()
 }
