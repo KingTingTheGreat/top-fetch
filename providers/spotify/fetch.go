@@ -1,8 +1,10 @@
 package spotify
 
 import (
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"math/big"
 )
 
 // Takes in AccessToken and RefreshToken.
@@ -25,8 +27,8 @@ func GetSpotifyId(clientId, clientSecret, accessToken, refreshToken string) (str
 // Takes in AccessToken and RefreshToken.
 // Returns user's top song of type Track.
 // If the provided AccessToken has expired, return the new AccessToken.
-func GetUserTopTrack(clientId, clientSecret, accessToken, refreshToken string) (*Track, string, error) {
-	body, newAccessToken, err := spotifyRequest(clientId, clientSecret, accessToken, refreshToken, "https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=1")
+func GetUserTopTrack(clientId, clientSecret, accessToken, refreshToken string, choice int) (*Track, string, error) {
+	body, newAccessToken, err := spotifyRequest(clientId, clientSecret, accessToken, refreshToken, fmt.Sprintf("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=%d", choice))
 	if err != nil {
 		return nil, "", err
 	}
@@ -40,6 +42,12 @@ func GetUserTopTrack(clientId, clientSecret, accessToken, refreshToken string) (
 		return nil, "", fmt.Errorf("no top track found")
 	}
 
-	return &topTracksResponse.Items[0], newAccessToken, nil
+	max := big.NewInt(int64(len(topTracksResponse.Items)))
+	randIndex, err := rand.Int(rand.Reader, max)
+	if err != nil {
+		randIndex = big.NewInt(0)
+	}
+
+	return &topTracksResponse.Items[randIndex.Int64()], newAccessToken, nil
 
 }

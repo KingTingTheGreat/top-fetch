@@ -151,6 +151,14 @@ func ParseArgs() {
 			} else {
 				cfg.Backup = val
 			}
+		case CHOICE:
+			newChoice, err := strconv.Atoi(val)
+			if err != nil {
+				log.Fatal("invalid choice: must be a valid integer")
+			} else if newChoice <= 0 {
+				log.Fatal("invalid choice: must be positive")
+			}
+			cfg.Choice = newChoice
 		}
 	}
 	cfg.ConverterConfig.PaddingRight += cfg.MarginRight

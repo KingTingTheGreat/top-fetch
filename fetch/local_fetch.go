@@ -29,7 +29,7 @@ func LocalFetch() (string, string) {
 		}
 	}
 	// log.Println("getting top track")
-	track, newAccessToken, err := spotify.GetUserTopTrack(cfg.SpotifyClientId, cfg.SpotifyClientSecret, cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken)
+	track, newAccessToken, err := spotify.GetUserTopTrack(cfg.SpotifyClientId, cfg.SpotifyClientSecret, cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken, cfg.Choice)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

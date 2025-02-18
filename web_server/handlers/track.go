@@ -3,6 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/kingtingthegreat/top-fetch/env"
 	"github.com/kingtingthegreat/top-fetch/providers/spotify"
@@ -18,6 +19,11 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	choice, err := strconv.Atoi(r.URL.Query().Get("choice"))
+	if err != nil {
+		choice = 1
+	}
+
 	user, err := db.GetUserById(id)
 	if err != nil {
 		log.Println("no user found", err.Error())
@@ -26,7 +32,7 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	track, newAccessToken, err := spotify.GetUserTopTrack(env.EnvVal("SPOTIFY_CLIENT_ID"), env.EnvVal("SPOTIFY_CLIENT_SECRET"), user.AccessToken, user.RefreshToken)
+	track, newAccessToken, err := spotify.GetUserTopTrack(env.EnvVal("SPOTIFY_CLIENT_ID"), env.EnvVal("SPOTIFY_CLIENT_SECRET"), user.AccessToken, user.RefreshToken, choice)
 	if err != nil {
 		log.Println("could not get track")
 		w.WriteHeader(http.StatusInternalServerError)

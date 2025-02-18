@@ -25,6 +25,7 @@ type config struct {
 	ConverterConfig     converter_config.Config
 	Env                 string
 	Backup              string
+	Choice              int
 }
 
 const (
@@ -51,6 +52,7 @@ const (
 	MARGIN_LEFT    = "mL"
 	ENV            = "env"
 	BACKUP         = "backup"
+	CHOICE         = "choice"
 )
 
 const WRAP = "wrap"

@@ -27,6 +27,7 @@ var cfg config = config{
 		PaddingLeft:   0,
 	},
 	Backup: "",
+	Choice: 1,
 }
 
 func Config() *config {
