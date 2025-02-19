@@ -2,8 +2,24 @@ package tmplts
 
 templ Home() {
 	<main class="w-full flex flex-col items-center text-center">
+		<style>
+			a:hover .spotify-logo {
+				content: url('/public/Spotify_Full_Logo_RGB_Green.png');
+			}
+		</style>
 		<h1 class="text-5xl font-semibold">Welcome to TopFetch!</h1>
 		<h2 class="text-lg">Check your current top song from the terminal, the superior computer interface.</h2>
-		<a class="px-4 py-4 border-2 font-medium rounded-xl m-4 hover:border-[#1DB954] hover:text-[#1DB954] transition-colors" href={ templ.SafeURL("/sign-in") }>Sign In with Spotify</a>
+		<a
+			class="px-4 py-4 border-2 flex font-semibold rounded-xl m-4 hover:border-[#1DB954] hover:text-[#1DB954] group"
+			href={ templ.SafeURL("/sign-in") }
+		>
+			Sign In with
+			<img
+				src="/public/Spotify_Full_Logo_RGB_White.png"
+				width="100"
+				alt="Spotify logo"
+				class="spotify-logo ml-1"
+			/>
+		</a>
 	</main>
 }
