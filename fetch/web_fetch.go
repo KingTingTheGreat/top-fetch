@@ -16,7 +16,7 @@ func WebFetch() (string, string) {
 		log.Fatal("TopFetch id is not set")
 	}
 
-	res, err := http.Get(fmt.Sprintf("https://top-fetch.vercel.app/track?id=&d&choice=%d", cfg.TopFetchId, cfg.Choice))
+	res, err := http.Get(fmt.Sprintf("https://top-fetch.jting.org/track?id=&d&choice=%d", cfg.TopFetchId, cfg.Choice))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
