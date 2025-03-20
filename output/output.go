@@ -6,18 +6,22 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"unicode/utf8"
 
 	"github.com/kingtingthegreat/top-fetch/config"
 )
 
 func centerTrackText(trackText string, dim int, left, right int) string {
-	if len(trackText) > dim {
+	trackText = strings.Split(trackText, "\x1B")[0] + "🎵"
+	length := utf8.RuneCountInString(trackText)
+
+	if length > dim {
 		return trackText
 	}
 
 	width := left + dim + right
-	rightPad := (width - len(trackText)) / 2
-	leftPad := width - len(trackText) - rightPad
+	rightPad := (width - length) / 2
+	leftPad := width - length - rightPad
 	return strings.Repeat(" ", leftPad) + trackText + strings.Repeat(" ", rightPad)
 }
 
