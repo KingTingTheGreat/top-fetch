@@ -41,5 +41,6 @@ func LocalFetch() (string, string) {
 		}
 	}
 
-	return track.Album.Images[0].Url, track.Name + " - " + track.Artists[0].Name
+	link := fmt.Sprintf(" \x1B]8;;%s\x1B\\🎵\x1B]8;;\x1B\\", track.ExternalUrls.Spotify)
+	return track.Album.Images[0].Url, track.Name + " - " + track.Artists[0].Name + link
 }
