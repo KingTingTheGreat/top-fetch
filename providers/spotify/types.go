@@ -22,14 +22,19 @@ type Album struct {
 	Images      []Image  `json:"images"`
 }
 
+type ExternalUrls struct {
+	Spotify string `json:"spotify"`
+}
+
 type Track struct {
-	Name        string   `json:"name"`
-	Album       Album    `json:"album"`
-	Artists     []Artist `json:"artists"`
-	Uri         string   `json:"uri"`
-	Href        string   `json:"href"`
-	TrackNumber int      `json:"track_number"`
-	Popularity  int      `json:"popularity"`
+	Name         string       `json:"name"`
+	Album        Album        `json:"album"`
+	Artists      []Artist     `json:"artists"`
+	Uri          string       `json:"uri"`
+	Href         string       `json:"href"`
+	TrackNumber  int          `json:"track_number"`
+	Popularity   int          `json:"popularity"`
+	ExternalUrls ExternalUrls `json:"external_urls"`
 }
 
 type ProfileResponse struct {
