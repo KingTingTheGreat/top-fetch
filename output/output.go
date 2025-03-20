@@ -12,8 +12,7 @@ import (
 )
 
 func centerTrackText(trackText string, dim int, left, right int) string {
-	trackText = strings.Split(trackText, "\x1B")[0] + "🎵"
-	length := utf8.RuneCountInString(trackText)
+	length := utf8.RuneCountInString(strings.Split(trackText, "\x1B")[0] + "🎵")
 
 	if length > dim {
 		return trackText
