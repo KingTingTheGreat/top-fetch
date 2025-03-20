@@ -11,19 +11,28 @@ import (
 )
 
 func fetchAndDisplay(web bool) {
-	var imageUrl, trackText string
-	if web {
-		imageUrl, trackText = fetch.WebFetch()
-	} else {
-		imageUrl, trackText = fetch.LocalFetch()
-	}
-
-	img, err := output.UrlToImage(imageUrl)
+	img, trackText, err := fetch.Fetch(web)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(err)
 	}
 
 	output.Output(img, trackText)
+}
+
+func fetchAndDisplayTimeout(web bool, done chan bool) {
+	img, trackText, err := fetch.Fetch(web)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	select {
+	case <-done:
+		return
+	default:
+		done <- true
+		output.Output(img, trackText)
+		done <- true
+	}
 }
 
 func main() {
@@ -37,9 +46,10 @@ func main() {
 	} else {
 		timeout := time.Tick(time.Duration(cfg.Timeout) * time.Millisecond)
 		done := make(chan bool)
-		go func() { fetchAndDisplay(cfg.Web); done <- true }()
+		go fetchAndDisplayTimeout(cfg.Web, done)
 		select {
 		case <-done:
+			<-done
 			return
 		case <-timeout:
 			if cfg.Backup == "" {
