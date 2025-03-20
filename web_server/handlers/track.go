@@ -46,9 +46,8 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 		db.UpdateUser(user)
 	}
 
-	log.Println("external url:", track.ExternalUrls.Spotify)
+	log.Println("song:", track.Name, "by", track.Artists[0].Name, "on", track.Album.Name)
 	link := fmt.Sprintf(" \x1B]8;;%s\x1B\\🎵\x1B]8;;\x1B\\", track.ExternalUrls.Spotify)
-	log.Println("link:", link)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(track.Album.Images[0].Url + "\x1d" + track.Name + " - " + track.Artists[0].Name + link))
 }
