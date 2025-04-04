@@ -10,19 +10,29 @@ import (
 	"github.com/kingtingthegreat/top-fetch/output"
 )
 
-func fetchAndDisplay(web bool) {
+func fetchAndDisplay(web bool, backupFile string) {
 	img, trackText, err := fetch.Fetch(web)
 	if err != nil {
-		log.Fatal(err)
+		backupString := output.ReadBackup(backupFile)
+		if backupString == "" {
+			log.Fatal("Something went wrong while fetching and backup is empty")
+		}
+		output.OutputBackup(backupString)
 	}
 
 	output.Output(img, trackText)
 }
 
-func fetchAndDisplayTimeout(web bool, done chan bool) {
+func fetchAndDisplayTimeout(web bool, done chan bool, backupFile string) {
 	img, trackText, err := fetch.Fetch(web)
 	if err != nil {
-		log.Fatal(err)
+		done <- true
+		backupString := output.ReadBackup(backupFile)
+		if backupString == "" {
+			log.Fatal("Something went wrong while fetching and backup is empty")
+		}
+		output.OutputBackup(backupString)
+		done <- true
 	}
 
 	select {
@@ -42,11 +52,11 @@ func main() {
 
 	if cfg.Timeout < 0 {
 		// negative means no timeout
-		fetchAndDisplay(cfg.Web)
+		fetchAndDisplay(cfg.Web, cfg.Backup)
 	} else {
 		timeout := time.Tick(time.Duration(cfg.Timeout) * time.Millisecond)
 		done := make(chan bool)
-		go fetchAndDisplayTimeout(cfg.Web, done)
+		go fetchAndDisplayTimeout(cfg.Web, done, cfg.Backup)
 		select {
 		case <-done:
 			<-done
