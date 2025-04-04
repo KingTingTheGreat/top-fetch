@@ -10,7 +10,7 @@ import (
 	"github.com/kingtingthegreat/top-fetch/config"
 )
 
-func WebFetch() (string, string) {
+func WebFetch() (string, string, error) {
 	cfg := config.Config()
 	if cfg.TopFetchId == "" {
 		log.Fatal("TopFetch id is not set")
@@ -18,7 +18,7 @@ func WebFetch() (string, string) {
 
 	res, err := http.Get(fmt.Sprintf("https://top-fetch.jting.org/track?id=%s&choice=%d", cfg.TopFetchId, cfg.Choice))
 	if err != nil {
-		log.Fatal(err.Error())
+		return "", "", err
 	}
 	defer res.Body.Close()
 
@@ -35,5 +35,5 @@ func WebFetch() (string, string) {
 		log.Fatal("something went wrong!! please contact me")
 	}
 
-	return infoList[0], infoList[1]
+	return infoList[0], infoList[1], nil
 }

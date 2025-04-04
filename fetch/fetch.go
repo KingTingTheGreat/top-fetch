@@ -6,10 +6,17 @@ import (
 
 func Fetch(web bool) (*image.Image, string, error) {
 	var imageUrl, trackText string
+	var err error
 	if web {
-		imageUrl, trackText = WebFetch()
+		imageUrl, trackText, err = WebFetch()
+		if err != nil {
+			return nil, "", err
+		}
 	} else {
-		imageUrl, trackText = LocalFetch()
+		imageUrl, trackText, err = LocalFetch()
+		if err != nil {
+			return nil, "", err
+		}
 	}
 
 	img, err := UrlToImage(imageUrl)

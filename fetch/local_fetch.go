@@ -9,7 +9,7 @@ import (
 	"github.com/kingtingthegreat/top-fetch/providers/spotify"
 )
 
-func LocalFetch() (string, string) {
+func LocalFetch() (string, string, error) {
 	cfg := config.Config()
 	if cfg.SpotifyClientId == "" || cfg.SpotifyClientSecret == "" {
 		log.Fatal("Spotify client id or client secret is not set")
@@ -31,7 +31,7 @@ func LocalFetch() (string, string) {
 	// log.Println("getting top track")
 	track, newAccessToken, err := spotify.GetUserTopTrack(cfg.SpotifyClientId, cfg.SpotifyClientSecret, cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken, cfg.Choice)
 	if err != nil {
-		log.Fatal(err.Error())
+		return "", "", err
 	}
 	if newAccessToken != "" {
 		if cfg.Env == "" {
@@ -42,5 +42,5 @@ func LocalFetch() (string, string) {
 	}
 
 	link := fmt.Sprintf(" \x1B]8;;%s\x1B\\🎵\x1B]8;;\x1B\\", track.ExternalUrls.Spotify)
-	return track.Album.Images[0].Url, track.Name + " - " + track.Artists[0].Name + link
+	return track.Album.Images[0].Url, track.Name + " - " + track.Artists[0].Name + link, nil
 }
