@@ -9,7 +9,7 @@ import (
 func ReadBackup(file string) string {
 	data, err := os.ReadFile(file)
 	if err != nil {
-		log.Fatal(err.Error())
+		log.Fatal(err)
 	}
 
 	return string(data)
