@@ -60,34 +60,34 @@ func ConnectDB() *mongo.Client {
 	return client
 }
 
-var db *mongo.Client = ConnectDB()
-var userColletion *mongo.Collection = getCollection(env.EnvVal("COLLECTION_NAME"))
+var DB *mongo.Client = nil
+var UserCollection *mongo.Collection = nil
 
-func getCollection(collectionName string) *mongo.Collection {
+func GetCollection(collectionName string) *mongo.Collection {
 	environment := env.EnvVal("ENVIRONMENT")
 	if environment == "" {
 		environment = "dev"
 	}
 
-	return db.Database(env.EnvVal("DB_NAME") + environment).Collection(collectionName)
+	return DB.Database(env.EnvVal("DB_NAME") + environment).Collection(collectionName)
 }
 
 func GetUserById(id string) (*DBUser, error) {
 	var user DBUser
-	err := userColletion.FindOne(context.Background(), bson.M{"id": id}).Decode(&user)
+	err := UserCollection.FindOne(context.Background(), bson.M{"id": id}).Decode(&user)
 	return &user, err
 }
 
 func GetUserByProviderId(providerId string) (*DBUser, error) {
 	var user DBUser
-	err := userColletion.FindOne(context.Background(), bson.M{"providerId": providerId}).Decode(&user)
+	err := UserCollection.FindOne(context.Background(), bson.M{"providerId": providerId}).Decode(&user)
 	return &user, err
 }
 
 func InsertUser(user *DBUser) (string, error) {
 	user.Id = generateId()
 
-	_, err := userColletion.InsertOne(context.Background(), *user)
+	_, err := UserCollection.InsertOne(context.Background(), *user)
 	if err != nil {
 		log.Println(err)
 		return "", err
@@ -97,6 +97,6 @@ func InsertUser(user *DBUser) (string, error) {
 }
 
 func UpdateUser(user *DBUser) error {
-	_, err := userColletion.UpdateOne(context.Background(), bson.M{"id": user.Id}, bson.M{"$set": *user})
+	_, err := UserCollection.UpdateOne(context.Background(), bson.M{"id": user.Id}, bson.M{"$set": *user})
 	return err
 }
