@@ -47,7 +47,7 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 		db.UpdateUser(user)
 	}
 
-	imgRes, err := http.Get(track.Album.Images[len(track.Album.Images)-1].Url)
+	imgRes, err := http.Get(track.Album.Images[0].Url)
 	if err != nil || imgRes.StatusCode != http.StatusOK {
 		http.Error(w, "Failed to fetch image", http.StatusInternalServerError)
 		return
