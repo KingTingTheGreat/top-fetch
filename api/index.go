@@ -9,8 +9,9 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	for k, v := range os.Environ() {
-		fmt.Println(k, v)
+	fmt.Println("Environment Variables:")
+	for i, env := range os.Environ() {
+		fmt.Println(i, env)
 	}
 	server := server.Server()
 	server.Handler.ServeHTTP(w, r)
