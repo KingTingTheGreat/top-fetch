@@ -1,5 +1,5 @@
 [build]
-  command = "touch env/.env; curl -L https://github.com/a-h/templ/releases/download/v0.3.960/templ_Linux_x86_64.tar.gz | tar -xz; ./templ generate; npm install tailwindcss @tailwindcss/cli; npx @tailwindcss/cli -i ./input.css -o ./public/styles.css && go build -o ./netlify/functions/index ./functions/index.go"
+  command = "touch env/.env; curl -L https://github.com/a-h/templ/releases/download/v0.3.960/templ_Linux_x86_64.tar.gz | tar -xz; ./templ generate; npm install tailwindcss @tailwindcss/cli; npx @tailwindcss/cli -i ./input.css -o ./public/styles.css && cd .netlify/function && go build ./netlify/functions/index.go -o ./netlify/functions/index && cd ../.."
   publish = "public"
   # functions = "api"      # <– this dir contains index.go
 # [[redirects]]
