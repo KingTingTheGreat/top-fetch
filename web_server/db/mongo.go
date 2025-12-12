@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"math/rand"
-	"os"
 	"time"
 
 	"github.com/kingtingthegreat/top-fetch/env"
@@ -43,11 +42,6 @@ func generateId() string {
 
 func ConnectDB() *mongo.Client {
 	env.LoadEnv()
-
-	log.Println("Environment Variables:")
-	for i, env := range os.Environ() {
-		log.Println(i, env)
-	}
 
 	bg := context.Background()
 	wT, cancel := context.WithTimeout(bg, 10000*time.Millisecond)
