@@ -1,16 +1,19 @@
 package fetch
 
 import (
+	"bytes"
 	"fmt"
+	"image"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/kingtingthegreat/top-fetch/config"
 )
 
-func WebFetch() (string, string, error) {
+func WebFetch() (string, *image.Image, error) {
 	cfg := config.Config()
 	if cfg.TopFetchId == "" {
 		log.Fatal("TopFetch id is not set")
@@ -18,7 +21,7 @@ func WebFetch() (string, string, error) {
 
 	res, err := http.Get(fmt.Sprintf("https://top-fetch.jting.org/track?id=%s&choice=%d", cfg.TopFetchId, cfg.Choice))
 	if err != nil {
-		return "", "", err
+		return "", nil, err
 	}
 	defer res.Body.Close()
 
@@ -26,14 +29,20 @@ func WebFetch() (string, string, error) {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	info := string(bodyBytes)
 
-	infoList := strings.Split(info, "\x1d")
-	if len(infoList) == 1 {
-		log.Fatal(info)
-	} else if len(infoList) != 2 {
-		log.Fatal("something went wrong!! please contact me")
+	dataList := bytes.SplitN(bodyBytes, []byte("\x1d"), 2)
+	if len(dataList) < 2 {
+		return "", nil, fmt.Errorf("invalid response format from Top Fetch server")
 	}
 
-	return infoList[0], infoList[1], nil
+	text := string(dataList[0])
+
+	imgBytes := dataList[1]
+	img, _, err := image.Decode(bytes.NewReader(imgBytes))
+	// img, _, err := image.Decode(res.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	return text, &img, nil
 }

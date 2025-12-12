@@ -2,6 +2,7 @@ package fetch
 
 import (
 	"fmt"
+	"image"
 	"log"
 
 	"github.com/kingtingthegreat/top-fetch/config"
@@ -9,7 +10,7 @@ import (
 	"github.com/kingtingthegreat/top-fetch/providers/spotify"
 )
 
-func LocalFetch() (string, string, error) {
+func LocalFetch() (string, *image.Image, error) {
 	cfg := config.Config()
 	if cfg.SpotifyClientId == "" || cfg.SpotifyClientSecret == "" {
 		log.Fatal("Spotify client id or client secret is not set")
@@ -31,7 +32,7 @@ func LocalFetch() (string, string, error) {
 	// log.Println("getting top track")
 	track, newAccessToken, err := spotify.GetUserTopTrack(cfg.SpotifyClientId, cfg.SpotifyClientSecret, cfg.SpotifyAccessToken, cfg.SpotifyRefreshToken, cfg.Choice)
 	if err != nil {
-		return "", "", err
+		return "", nil, err
 	}
 	if newAccessToken != "" {
 		if cfg.Env == "" {
@@ -42,5 +43,11 @@ func LocalFetch() (string, string, error) {
 	}
 
 	link := fmt.Sprintf(" \x1B]8;;%s\x1B\\🎵\x1B]8;;\x1B\\", track.ExternalUrls.Spotify)
-	return track.Album.Images[0].Url, track.Name + " - " + track.Artists[0].Name + link, nil
+
+	img, err := UrlToImage(track.Album.Images[0].Url)
+	if err != nil {
+		return "", nil, err
+	}
+
+	return track.Name + " - " + track.Artists[0].Name + link, img, nil
 }

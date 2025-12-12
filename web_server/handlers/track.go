@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
@@ -46,8 +47,22 @@ func TrackHandler(w http.ResponseWriter, r *http.Request) {
 		db.UpdateUser(user)
 	}
 
+	imgRes, err := http.Get(track.Album.Images[0].Url)
+	if err != nil || imgRes.StatusCode != http.StatusOK {
+		http.Error(w, "Failed to fetch image", http.StatusInternalServerError)
+		return
+	}
+	defer imgRes.Body.Close()
+
+	imgBytes, err := io.ReadAll(imgRes.Body)
+	if err != nil {
+		http.Error(w, "failed to read image bytes: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	log.Println("song:", track.Name, "by", track.Artists[0].Name, "on", track.Album.Name)
 	link := fmt.Sprintf(" \x1B]8;;%s\x1B\\🎵\x1B]8;;\x1B\\", track.ExternalUrls.Spotify)
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(track.Album.Images[0].Url + "\x1d" + track.Name + " - " + track.Artists[0].Name + link))
+	w.Write([]byte(track.Name + " - " + track.Artists[0].Name + link + "\x1d"))
+	w.Write(imgBytes)
 }
