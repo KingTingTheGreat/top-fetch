@@ -8,7 +8,7 @@
   echo 'building tailwindcss styles' &&
   npm install tailwindcss @tailwindcss/cli && npx @tailwindcss/cli -i ./input.css -o ./public/styles.css && 
   echo 'building Go functions' &&
-  cd .netlify/function && go build ./netlify/functions/index.go -o ./netlify/functions/index && cd ../..
+  cd .netlify/functions && go build ./netlify/functions/index.go -o ./netlify/functions/index && cd ../..
   """
   publish = "public"
   # functions = "api"      # <– this dir contains index.go
