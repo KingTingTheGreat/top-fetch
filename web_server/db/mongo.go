@@ -47,6 +47,8 @@ func ConnectDB() *mongo.Client {
 	defer func() { cancel() }()
 	client, err := mongo.Connect(options.Client().ApplyURI(env.EnvVal("MONGO_URI")))
 	if err != nil {
+		log.Println("failed to connect to mongodb:", err.Error())
+		log.Println("please make sure MONGO_URI is set correctly", env.EnvVal("MONGO_URI"))
 		log.Fatal(err)
 	}
 
