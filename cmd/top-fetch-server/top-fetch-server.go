@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/joho/godotenv"
-	"github.com/kingtingthegreat/top-fetch/env"
 	"github.com/kingtingthegreat/top-fetch/web_server/db"
 	"github.com/kingtingthegreat/top-fetch/web_server/server"
 )
@@ -13,8 +12,7 @@ import (
 func main() {
 	godotenv.Load()
 
-	db.DB = db.ConnectDB()
-	db.UserCollection = db.GetCollection(env.EnvVal("COLLECTION_NAME"))
+	db.ConnectDB()
 	server := server.Server()
 	fmt.Println("Server running at http://localhost:8080")
 	err := server.ListenAndServe()

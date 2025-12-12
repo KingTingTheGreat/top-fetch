@@ -40,36 +40,41 @@ func generateId() string {
 	}
 }
 
-func ConnectDB() *mongo.Client {
-	env.LoadEnv()
-
-	bg := context.Background()
-	wT, cancel := context.WithTimeout(bg, 10000*time.Millisecond)
-	defer func() { cancel() }()
-	client, err := mongo.Connect(options.Client().ApplyURI(env.EnvVal("MONGO_URI")))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = client.Ping(wT, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	log.Println("connected to mongodb")
-	return client
-}
-
-var DB *mongo.Client = nil
+var db *mongo.Client = nil
 var UserCollection *mongo.Collection = nil
 
-func GetCollection(collectionName string) *mongo.Collection {
+func ConnectDB() {
+	env.LoadEnv()
+	if db == nil {
+		bg := context.Background()
+		wT, cancel := context.WithTimeout(bg, 10000*time.Millisecond)
+		defer func() { cancel() }()
+		client, err := mongo.Connect(options.Client().ApplyURI(env.EnvVal("MONGO_URI")))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = client.Ping(wT, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println("connected to mongodb")
+
+		db = client
+	}
+	if UserCollection == nil {
+		UserCollection = getCollection(env.EnvVal("COLLECTION_NAME"))
+	}
+}
+
+func getCollection(collectionName string) *mongo.Collection {
 	environment := env.EnvVal("ENVIRONMENT")
 	if environment == "" {
 		environment = "dev"
 	}
 
-	return DB.Database(env.EnvVal("DB_NAME") + environment).Collection(collectionName)
+	return db.Database(env.EnvVal("DB_NAME") + environment).Collection(collectionName)
 }
 
 func GetUserById(id string) (*DBUser, error) {
