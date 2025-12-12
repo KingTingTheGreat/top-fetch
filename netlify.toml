@@ -1,0 +1,14 @@
+[build]
+  command = ""
+  publish = "public"
+  functions = "api"      # <– this dir contains index.go
+[[redirects]]
+  from = "/public/*"
+  to = "/static/:splat"
+  status = 200
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/index"
+  status = 200
+
+
