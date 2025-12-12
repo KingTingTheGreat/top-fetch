@@ -1,9 +1,13 @@
 [build]
   command = """
+  echo 'creating .env file' &&
   touch env/.env && 
+  echo 'generating site with templ' &&
   curl -L https://github.com/a-h/templ/releases/download/v0.3.960/templ_Linux_x86_64.tar.gz | tar -xz && 
   ./templ generate &&
+  echo 'building tailwindcss styles' &&
   npm install tailwindcss @tailwindcss/cli && npx @tailwindcss/cli -i ./input.css -o ./public/styles.css && 
+  echo 'building Go functions' &&
   cd .netlify/function && go build ./netlify/functions/index.go -o ./netlify/functions/index && cd ../..
   """
   publish = "public"
