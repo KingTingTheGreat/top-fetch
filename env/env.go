@@ -23,9 +23,7 @@ func LoadEnv() {
 func EnvVal(key string) string {
 	val := env[key]
 	if val != "" {
-		log.Printf("env: using %s from embedded .env: %s\n", key, val)
 		return val
 	}
-	log.Printf("env: using %s from system environment: %s\n", key, val)
 	return os.Getenv(key)
 }
